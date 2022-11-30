@@ -34,3 +34,25 @@ def is_ip(ip_address): #asd127.21.12.2
     print(f"The IP address {ip_address} is valid")
 
     return True
+
+def get_cidr(ip_address):
+
+    cidr=0
+
+    ip=ip_address.split(".") #Splitting the ip
+
+    num=int(ip[0]) #getting the first octet
+
+    if(num>=0 and num<=127): #class A       # (0 <= num <=127)
+
+         cidr=8
+
+    elif(num>127 and num<=191): #class B
+
+       cidr=16
+
+    elif(num>=192 and num<=223): #class C
+
+        cidr=24
+
+    return cidr
