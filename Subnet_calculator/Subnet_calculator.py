@@ -81,3 +81,20 @@ def get_subnet(ip, cidr):
         print(new_ip)
     else:
         print(ip)
+
+        
+def get_subnetmask(cidr):
+    octa=cidr//8
+    subnet_bits_in_octa=8-cidr%8
+    subnet_num=256-2**subnet_bits_in_octa
+    index=0
+    subnetmask=""
+    while index < 4:
+        if(index<octa):
+            subnetmask += "255"+"."
+        elif(index==octa):
+            subnetmask += str(subnet_num) + "."
+        else:
+            subnetmask += "0"
+        index+=1
+    return subnetmask
