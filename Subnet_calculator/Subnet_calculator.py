@@ -98,3 +98,8 @@ def get_subnetmask(cidr):
             subnetmask += "0"
         index+=1
     return subnetmask
+
+# Input positive number
+def get_bits_number(num):
+    bit = math.log2(num)
+    return math.ceil(bit)
