@@ -56,3 +56,28 @@ def get_cidr(ip_address):
         cidr=24
 
     return cidr
+
+def get_subnet(ip, cidr):
+    if (cidr < 32):
+        octa = cidr//8                                     #ocat-1
+        target_octa_value = int(ip.split(".")[octa])
+        host_bit = 8 - cidr % 8                          #every octa 8 bits
+        group_size = 2 ** host_bit
+        octa_subnet_id = target_octa_value-(target_octa_value % group_size)
+        new_ip = "" #192.168.135.31/23 -> 192.168.135.0
+        octa_index = 0
+        while (octa_index < 4):
+            if (octa_index < octa):
+                new_ip += ip.split(".")[octa_index]+"."
+            elif (octa_index == octa):
+                new_ip += str(octa_subnet_id)
+                if (octa_index <3 ):
+                    new_ip +="."
+            else:
+                new_ip +="0"
+                if (octa_index < 3):
+                    new_ip += "."
+            octa_index += 1
+        print(new_ip)
+    else:
+        print(ip)
