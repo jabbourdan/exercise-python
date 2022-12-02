@@ -125,3 +125,19 @@ def get_mask(cidr):
     subnetMask = calc_address_from_decimal(binarySubnetMaskToDecimal)
     #print(subnetMask)
     return subnetMask
+
+def calc_address_from_decimal(decAddress):
+    binaryAddress = bin(decAddress)  # translate back to binary
+    binaryAddress = '{:032}'.format(int(binaryAddress[2:]))  # removes 0b from the beginning
+    #print(binaryAddress)
+    # break into list of octets
+    networkAdList = re.findall('........', binaryAddress)
+                            #networkAdList=int(networkAdList, 2)
+    # convert to decimal, add "."
+                             #ipAddress=(".").join(networkAdList)
+    ipAddress = ""
+    for index, octate in enumerate(networkAdList):
+        ipAddress += str(int(octate, 2))
+        if (index < 3):
+           ipAddress += "."
+    return ipAddress
