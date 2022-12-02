@@ -103,3 +103,10 @@ def get_subnetmask(cidr):
 def get_bits_number(num):
     bit = math.log2(num)
     return math.ceil(bit)
+
+
+def calc_new_cidr(part_type, bit_num, cidr):
+    if (part_type == "Subnets"):
+        return (cidr+bit_num)
+    else:
+        return (32-bit_num)
