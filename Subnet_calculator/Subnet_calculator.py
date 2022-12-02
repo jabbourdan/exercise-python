@@ -110,3 +110,18 @@ def calc_new_cidr(part_type, bit_num, cidr):
         return (cidr+bit_num)
     else:
         return (32-bit_num)
+
+        
+def get_mask(cidr):
+    bitsLength = 32
+    binarySubnetMask = ""
+
+    for i in range(1, bitsLength + 1):
+        if (i <= cidr):
+            binarySubnetMask+="1"
+        else:
+            binarySubnetMask += "0"
+    binarySubnetMaskToDecimal = int(binarySubnetMask, 2)
+    subnetMask = calc_address_from_decimal(binarySubnetMaskToDecimal)
+    #print(subnetMask)
+    return subnetMask
