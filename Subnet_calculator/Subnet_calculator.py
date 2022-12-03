@@ -141,3 +141,67 @@ def calc_address_from_decimal(decAddress):
         if (index < 3):
            ipAddress += "."
     return ipAddress
+
+
+def calc_first_last_subnets(ip, subnetMask, cidr, newCIDR):
+    NetworkAddressBroadcastlist=[]
+    #group size
+    addressesNum = 2 ** (32-newCIDR)
+    ### Calculates usable hosts for output:
+    usable_hostsNum= addressesNum-2
+    ### Calculates number of subnets' for output & later use:
+    subnetsNum = 2 ** (newCIDR - cidr)
+    ipList= ip.split(".")
+    maskList = subnetMask.split(".")
+    #converts ip to a string consisting of 4 octets
+    binaryIP = '{0:08b}{1:08b}{2:08b}{3:08b}'.format(int(ipList[0]), int(ipList[1]), int(ipList[2]), int(ipList[3]))
+    #converts to decimal in order to be able to use & - binary and
+    decIP = int(binaryIP, 2)  # 192.1.1.1     1100 0001 0001 0001  92934992932
+
+    #converts mask to a string consisting of 4 octets
+    binaryMask = '{0:08b}{1:08b}{2:08b}{3:08b}'.format(int(maskList[0]),int(maskList[1]),int(maskList[2]),int(maskList[3]))
+    #converts to decimal in order to be able to use & - binary and
+    decMask = int(binaryMask, 2)
+
+    # calculates network address
+    binaryNetworkAd = bin(decIP & decMask)    # 111111110000000  111010101010011100
+
+    binNetworkAdToDecimal = int(binaryNetworkAd[2:], 2)  # removes '0b' from the beginning of the string,changes to decimal
+
+    # convert to decimal, add ".", ready for output after the loop
+    decNetworkAd=calc_address_from_decimal(binNetworkAdToDecimal)
+
+    # turns the whole string to decimal, for broadcast calc.
+    binaryNetworkAdToDecimal = int(binaryNetworkAd, 2)
+    
+    binaryBroadcastToDecimal = binaryNetworkAdToDecimal + addressesNum - 1  # calc. decimal from whole binary
+    decBroadcast = calc_address_from_decimal(binaryBroadcastToDecimal)
+    #Adds the network and broadcast addresses of the first subnet as a list, to a list
+    NetworkAddressBroadcastlist.append([decNetworkAd, decBroadcast])
+
+    if (1 < subnetsNum <= 4):
+
+        for subnetNum in range(1, subnetsNum): # i=1 => for 2nd subnet; i=2 => for 3rd subnet; i=3 => for 4th subnet
+            nextNetAdToDecimal = binaryNetworkAdToDecimal + (subnetNum * addressesNum)
+            nextNetAd = calc_address_from_decimal(nextNetAdToDecimal)
+            nextBroadcastToDecimal = binaryBroadcastToDecimal + subnetNum * addressesNum
+            nextBroadcast = calc_address_from_decimal(nextBroadcastToDecimal)
+            NetworkAddressBroadcastlist.append([nextNetAd, nextBroadcast])
+    else:
+        subnetNumDisplayList = [2, subnetsNum-1, subnetsNum]
+        for subnetNum in subnetNumDisplayList:
+            nextNetAdToDecimal = binaryNetworkAdToDecimal + subnetNum * addressesNum
+            nextNetAd = calc_address_from_decimal(nextNetAdToDecimal)
+            nextBroadcastToDecimal = binaryBroadcastToDecimal + subnetNum * addressesNum
+            nextBroadcast = calc_address_from_decimal(nextBroadcastToDecimal)
+            NetworkAddressBroadcastlist.append([nextNetAd, nextBroadcast])
+
+    ### returns a list of network id and broadcast addressess, for max 2 first and 2 last subnets
+    #return NetworkAddressBroadcastlist
+        print(subnetNumDisplayList)
+    print("binaryNetworkAd", binaryNetworkAd)
+    print(f'{decNetworkAd}/{newCIDR}')  # Gives the network address
+    print("total addresses", addressesNum)
+    print("total subnets", subnetsNum)
+    print(decBroadcast)
+    print(NetworkAddressBroadcastlist)
