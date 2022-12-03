@@ -251,3 +251,12 @@ def ip_input():
         exit()
     newcidr=calc_new_cidr(partition_type,bit_number, cidr)
     return (ip_address, cidr, newcidr)
+
+def main():
+
+    ip_address, cidr, newCidr = ip_input()
+    subnetMask = get_mask(cidr)
+    calc_first_last_subnets(ip_address, subnetMask, cidr, newCidr)
+
+if __name__ == '__main__':
+    main()
