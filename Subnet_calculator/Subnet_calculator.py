@@ -205,3 +205,49 @@ def calc_first_last_subnets(ip, subnetMask, cidr, newCIDR):
     print("total subnets", subnetsNum)
     print(decBroadcast)
     print(NetworkAddressBroadcastlist)
+
+def ip_input():
+    ip_address = input('Please enter an IP address in the shape: '
+                     'XXX.XXX.XXX.XXX: ')
+    while (not is_ip(ip_address)):  # if not ip address
+        ip_address = input('Please enter an IP address in the shape: '
+                           'XXX.XXX.XXX.XXX: ')
+    print(ip_address)
+    cidr = input("\nenter the CIDR\n(CIDR is optional): ")
+    while not cidr.isdigit() or not 0 <= int(cidr) <= 32:
+        if(cidr == ""):
+            break
+        cidr = input("\nenter the CIDR number between (0-32)\n(CIDR is optional): ")
+    if (not cidr):
+        cidr = get_cidr(ip_address)
+    cidr=int(cidr)
+
+    partitioning = input(
+        "\nDo you want the ip address to be partitioned as Hosts or "
+        "Subnets?\nenter \"h\" for hosts and \"s\" for subnets:\n")
+    hosts = ['h', 'H']
+    subnets = ['s', 'S']
+    if partitioning in hosts:
+        partition_type="Hosts"
+    elif partitioning in subnets:
+        partition_type = "Subnets"
+    else:
+        while not (partitioning in hosts) and not (partitioning in subnets):
+            partitioning = input(
+                "\nDo you want the ip address to be partitioned as Hosts or "
+                "Subnets?\nenter \"h\" for hosts and \"s\" for subnets:\n")
+            if partitioning in hosts:
+                partition_type = "Hosts"
+            elif partitioning in subnets:
+                partition_type = "Subnets"
+
+    print("\nSelected:", partition_type)
+    number_of_hosts = input("\nEnter the desired number of hosts: ")
+    while not ( number_of_hosts.isdigit()):
+        number_of_hosts = input("\nWrong input! You should insert number!\nEnter the desired number of hosts: ")
+    bit_number = get_bits_number(int(number_of_hosts))
+    if (cidr + bit_number > 32):
+        print("the requested number is larger than what we have")
+        exit()
+    newcidr=calc_new_cidr(partition_type,bit_number, cidr)
+    return (ip_address, cidr, newcidr)
