@@ -12,3 +12,18 @@ class tic_tac_toe_3D():
     '\033[43m'
     def prCyan(self,skk): print("\033[96m {}\033[00m" .format(skk))
     
+    def get_player_names(self):
+        self.prGreen('-' * 80)
+        self.prGreen("                     ██████████████████████████████████████ ")
+        self.prGreen("                     █ Welcome to our tic Tac Toe 3D game █ ")
+        self.prGreen("                     █   by Gal, Lior, Hagai and Yoav    █ ")
+        self.prGreen("                     ██████████████████████████████████████ ")
+        self.prGreen('-' * 80)
+        print()
+        name1 = input(" player 1 enter your name: ")
+        print('-' * 80)
+        name2 = input(" player 2 enter your name: ")
+        print('-' * 80)
+        # print(f"{players[starter_index]['name']} is starting the game!")
+        names = [name1, name2]
+        return names
